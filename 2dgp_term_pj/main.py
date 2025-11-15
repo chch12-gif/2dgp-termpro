@@ -30,6 +30,9 @@ ANOMALY_MONALISA_SMILE = 1 #15개 이상현상까지 사용 예정
 ANOMALY_HAND_PRINT = 2
 ANOMALY_PLAYER_GIANT = 3
 
+ALL_ANOMALIES = [ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT, ANOMALY_PLAYER_GIANT]
+seen_anomalies_this_run = []
+
 mona_x = 100
 mona_y = 500
 mona_w = 100
@@ -70,7 +73,7 @@ def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
     return distance_sq < distance_threshold ** 2
 
 def setup_new_room():
-    global is_anomaly_present, anomaly_type
+    global is_anomaly_present, anomaly_type, seen_anomalies_this_run
 
     if random.randint(0, 1) == 0:
         is_anomaly_present = True
@@ -80,6 +83,9 @@ def setup_new_room():
             print(f"DEBUG: ANOMALY PRESENT (Type: MONALISA SMILE - {anomaly_type})")
         elif anomaly_type == ANOMALY_HAND_PRINT:
             print(f"DEBUG: ANOMALY PRESENT (Type: HAND PRINT - {anomaly_type})")
+        elif anomaly_type == ANOMALY_PLAYER_GIANT:
+            print(f"DEBUG: ANOMALY PRESENT (Type: GIANT PLAYER - {anomaly_type})")
+
     else:
         is_anomaly_present = False
         anomaly_type = 0
@@ -239,6 +245,14 @@ while running:
        elif current_room_index == 1:
            pass
        draw_ui_text()
+
+       if anomaly_type == ANOMALY_PLAYER_GIANT:
+           player.current_w = player.original_w * 3
+           player.current_h = player.original_h * 3
+       else:
+           player.current_w = player.original_w
+           player.current_h = player.original_h
+
        player.draw()
 
     elif current_state == STATE_FADING_IN or current_state == STATE_POST_FADE_DELAY:
@@ -248,6 +262,14 @@ while running:
          elif current_room_index == 1:
              pass
          draw_ui_text()
+
+         if anomaly_type == ANOMALY_PLAYER_GIANT:
+             player.current_w = player.original_w * 3
+             player.current_h = player.original_h * 3
+         else:
+             player.current_w = player.original_w
+             player.current_h = player.original_h
+
          player.draw()
 
 
