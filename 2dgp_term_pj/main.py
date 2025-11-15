@@ -35,7 +35,7 @@ mona_w = 100
 mona_h = 150
 
 hand_print_x, hand_print_y = 400, 300
-hand_print_w, hand_print_h = 200, 200
+hand_print_w, hand_print_h = 600, 600
 
 starry_night_y = 500
 starry_night_w = 100
@@ -208,7 +208,7 @@ while running:
 
     def draw_room_0_art():
         if anomaly_type == ANOMALY_MONALISA_SMILE:
-            monalisa_smile_art.composite_draw(0, '', mona_x, mona_y, mona_w, mona_h)
+            monalisa_smile_art.composite_draw(0, '', mona_x, mona_y + 30, mona_w, mona_h)
         else:
             monalisa_art.composite_draw(0, '', mona_x, mona_y, mona_w, mona_h)
         if anomaly_type == ANOMALY_HAND_PRINT:
