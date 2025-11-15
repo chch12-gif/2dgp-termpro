@@ -98,7 +98,7 @@ island_art = load_image('pic_3.png')
 eating_planet_art = load_image('pic_4.png')
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
-hand_print_art = load_image('hand_print.jpg')
+hand_print_art = load_image('hand_print.png')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
 
