@@ -28,6 +28,7 @@ anomaly_type = 0
 
 ANOMALY_MONALISA_SMILE = 1 #15개 이상현상까지 사용 예정
 ANOMALY_HAND_PRINT = 2
+ANOMALY_PLAYER_GIANT = 3
 
 mona_x = 100
 mona_y = 500
@@ -74,7 +75,7 @@ def setup_new_room():
     if random.randint(0, 1) == 0:
         is_anomaly_present = True
 
-        anomaly_type = random.choice([ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT])
+        anomaly_type = random.choice([ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT, ANOMALY_PLAYER_GIANT])
         if anomaly_type == ANOMALY_MONALISA_SMILE:
             print(f"DEBUG: ANOMALY PRESENT (Type: MONALISA SMILE - {anomaly_type})")
         elif anomaly_type == ANOMALY_HAND_PRINT:

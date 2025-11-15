@@ -20,6 +20,12 @@ class Boy:
         self.new_width = self.frame_w_orig * self.scale
         self.new_height = self.frame_h_orig * self.scale
 
+        self.original_w = self.new_width
+        self.original_h = self.new_height
+
+        self.current_w = self.original_w
+        self.current_h = self.original_h
+
         self.boundary_bottom = 260
         self.boundary_top = 440
 
@@ -42,25 +48,29 @@ class Boy:
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN:
             if event.key == SDLK_RIGHT:
-                self.dir_x += 1
+                self.dir_x = 1
             elif event.key == SDLK_LEFT:
-                self.dir_x -= 1
+                self.dir_x = -1
             elif event.key == SDLK_UP:
-                self.dir_y += 1
+                self.dir_y = 1
             elif event.key == SDLK_DOWN:
-                self.dir_y -= 1
+                self.dir_y = -1
             elif event.key == SDLK_LSHIFT or event.key == SDLK_RSHIFT:
                 self.running_state = True
                 self.current_speed = self.run_speed
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
-                self.dir_x -= 1
+                self.dir_x = 0
             elif event.key == SDLK_LEFT:
-                self.dir_x += 1
+                if self.dir_x == -1:
+                    self.dir_x = 0
             elif event.key == SDLK_UP:
-                self.dir_y -= 1
+                if self.dir_y == 1:
+                    self.dir_y = 0
             elif event.key == SDLK_DOWN:
-                self.dir_y += 1
+                if self.dir_y == -1:
+                    self.dir_y = 0
+
             elif event.key == SDLK_LSHIFT or event.key == SDLK_RSHIFT:
                 self.running_state = False
                 self.current_speed = self.walk_speed
@@ -127,5 +137,5 @@ class Boy:
 
         image_to_draw.composite_draw(
             0, flip_option,
-            self.x, self.y, self.new_width, self.new_height
+            self.x, self.y, self.current_w, self.current_h
         )
