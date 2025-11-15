@@ -74,8 +74,11 @@ def setup_new_room():
     if random.randint(0, 1) == 0:
         is_anomaly_present = True
 
-        anomaly_type = ANOMALY_MONALISA_SMILE
-        print(f"DEBUG: ANOMALY PRESENT (Type: MONALISA SMILE - {anomaly_type})")
+        anomaly_type = random.choice([ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT])
+        if anomaly_type == ANOMALY_MONALISA_SMILE:
+            print(f"DEBUG: ANOMALY PRESENT (Type: MONALISA SMILE - {anomaly_type})")
+        elif anomaly_type == ANOMALY_HAND_PRINT:
+            print(f"DEBUG: ANOMALY PRESENT (Type: HAND PRINT - {anomaly_type})")
     else:
         is_anomaly_present = False
         anomaly_type = 0
@@ -95,7 +98,7 @@ island_art = load_image('pic_3.png')
 eating_planet_art = load_image('pic_4.png')
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
-hand_print_art = load_image('hand_print.png')
+hand_print_art = load_image('hand_print.jpg')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
 
@@ -208,6 +211,8 @@ while running:
             monalisa_smile_art.composite_draw(0, '', mona_x, mona_y, mona_w, mona_h)
         else:
             monalisa_art.composite_draw(0, '', mona_x, mona_y, mona_w, mona_h)
+        if anomaly_type == ANOMALY_HAND_PRINT:
+            hand_print_art.composite_draw(0, '', hand_print_x, hand_print_y, hand_print_w, hand_print_h)
             #추후 14개 이상 로직 여기 추가
 
         starry_night_art.composite_draw(0, '', starry_night_x, starry_night_y, starry_night_w, starry_night_h)
