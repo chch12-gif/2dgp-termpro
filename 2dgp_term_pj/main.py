@@ -25,6 +25,7 @@ FINAL_SUCCESS_COUNT = 7
 
 is_anomaly_present = False
 anomaly_type = 0
+is_first_game_run = True
 
 ANOMALY_MONALISA_SMILE = 1 #15개 이상현상까지 사용 예정
 ANOMALY_HAND_PRINT = 2
