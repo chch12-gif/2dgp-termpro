@@ -78,13 +78,19 @@ def setup_new_room():
     if random.randint(0, 1) == 0:
         is_anomaly_present = True
 
-        anomaly_type = random.choice([ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT, ANOMALY_PLAYER_GIANT])
-        if anomaly_type == ANOMALY_MONALISA_SMILE:
-            print(f"DEBUG: ANOMALY PRESENT (Type: MONALISA SMILE - {anomaly_type})")
-        elif anomaly_type == ANOMALY_HAND_PRINT:
-            print(f"DEBUG: ANOMALY PRESENT (Type: HAND PRINT - {anomaly_type})")
-        elif anomaly_type == ANOMALY_PLAYER_GIANT:
-            print(f"DEBUG: ANOMALY PRESENT (Type: GIANT PLAYER - {anomaly_type})")
+        available_anomalies = [a for a in ALL_ANOMALIES if a not in seen_anomalies_this_run]
+
+        if not available_anomalies:
+            print("DEBUG: All anomalies seen. Resetting list.")
+            seen_anomalies_this_run.clear()
+            available_anomalies = list(ALL_ANOMALIES)
+
+        anomaly_type  = random.choice(available_anomalies)
+
+        seen_anomalies_this_run.append(anomaly_type)
+
+        print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
+        print(f"DEBUG: Seen so far in this run: {seen_anomalies_this_run}")
 
     else:
         is_anomaly_present = False
@@ -157,6 +163,7 @@ while running:
                 current_state = STATE_FADING_OUT
                 transition_target_room = 0
                 success_count = 0
+                seen_anomalies_this_run.clear()
                 transition_player_pos_x = player.boundary_right
                 fade_alpha = 0.0
 
@@ -173,6 +180,10 @@ while running:
                     success_count += 1
                 else:
                     success_count = 0
+
+                    seen_anomalies_this_run.clear()
+                    print("DEBUG: Wrong choice! Resetting anomaly list.")
+
                 if success_count >= FINAL_SUCCESS_COUNT:
                     transition_target_room = 1
                 else:
