@@ -27,11 +27,15 @@ is_anomaly_present = False
 anomaly_type = 0
 
 ANOMALY_MONALISA_SMILE = 1 #15개 이상현상까지 사용 예정
+ANOMALY_HAND_PRINT = 2
 
 mona_x = 100
 mona_y = 500
 mona_w = 100
 mona_h = 150
+
+hand_print_x, hand_print_y = 400, 300
+hand_print_w, hand_print_h = 200, 200
 
 starry_night_y = 500
 starry_night_w = 100
@@ -91,6 +95,7 @@ island_art = load_image('pic_3.png')
 eating_planet_art = load_image('pic_4.png')
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
+hand_print_art = load_image('hand_print.png')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
 
