@@ -74,29 +74,36 @@ def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
     return distance_sq < distance_threshold ** 2
 
 def setup_new_room():
-    global is_anomaly_present, anomaly_type, seen_anomalies_this_run
+    global is_anomaly_present, anomaly_type, seen_anomalies_this_run, is_first_game_run
 
-    if random.randint(0, 1) == 0:
-        is_anomaly_present = True
-
-        available_anomalies = [a for a in ALL_ANOMALIES if a not in seen_anomalies_this_run]
-
-        if not available_anomalies:
-            print("DEBUG: All anomalies seen. Resetting list.")
-            seen_anomalies_this_run.clear()
-            available_anomalies = list(ALL_ANOMALIES)
-
-        anomaly_type  = random.choice(available_anomalies)
-
-        seen_anomalies_this_run.append(anomaly_type)
-
-        print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
-        print(f"DEBUG: Seen so far in this run: {seen_anomalies_this_run}")
-
-    else:
+    if is_first_game_run:
         is_anomaly_present = False
         anomaly_type = 0
-        print("DEBUG: No Anomaly.")
+        is_first_game_run = False
+        print("DEBUG: First run of the game. No Anomaly.")
+    else:
+
+        if random.randint(0, 1) == 0:
+           is_anomaly_present = True
+
+           available_anomalies = [a for a in ALL_ANOMALIES if a not in seen_anomalies_this_run]
+
+           if not available_anomalies:
+              print("DEBUG: All anomalies seen. Resetting list.")
+              seen_anomalies_this_run.clear()
+              available_anomalies = list(ALL_ANOMALIES)
+
+           anomaly_type  = random.choice(available_anomalies)
+
+           seen_anomalies_this_run.append(anomaly_type)
+
+           print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
+           print(f"DEBUG: Seen so far in this run: {seen_anomalies_this_run}")
+
+        else:
+           is_anomaly_present = False
+           anomaly_type = 0
+           print("DEBUG: No Anomaly.")
 
 
 # --- 1. 초기화 ---
