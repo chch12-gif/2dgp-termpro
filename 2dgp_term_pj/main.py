@@ -30,8 +30,9 @@ is_first_game_run = True
 ANOMALY_MONALISA_SMILE = 1 #15개 이상현상까지 사용 예정
 ANOMALY_HAND_PRINT = 2
 ANOMALY_PLAYER_GIANT = 3
+ANOMALY_DARK_ZONE = 4
 
-ALL_ANOMALIES = [ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT, ANOMALY_PLAYER_GIANT]
+ALL_ANOMALIES = [ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT, ANOMALY_PLAYER_GIANT, ANOMALY_DARK_ZONE]
 seen_anomalies_this_run = []
 
 mona_x = 100
@@ -120,6 +121,7 @@ eating_planet_art = load_image('pic_4.png')
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
 hand_print_art = load_image('hand_print.png')
+dark_zone_overlay = load_image('dark.png')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
 
