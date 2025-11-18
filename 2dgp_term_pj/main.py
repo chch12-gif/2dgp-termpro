@@ -309,6 +309,9 @@ while running:
                  dark_zone_overlay.draw(400, 300, 800, 600)
              else:
                  dark_zone_overlay.opacify(0.0)
+         if anomaly_type == ANOMALY_DARK_ZONE:
+             if dark_zone_start_x < player.x < dark_zone_end_x:
+                 player.draw()
 
          player.draw()
 
