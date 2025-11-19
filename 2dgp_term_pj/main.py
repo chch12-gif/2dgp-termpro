@@ -1,27 +1,35 @@
 # main.py
 
 from pico2d import *
+from config import *  # 설정값 및 상수 임포트
 from boy import Boy
-from config import *
+from background import Background
 import random
 
+# --- 변수 초기화 ---
 current_state = STATE_TITLE
 currently_viewing_art = ART_NONE
 current_room_index = 0
 success_count = 0
+
+# 8번 출구 로직 변수
 is_anomaly_present = False
 anomaly_type = 0
 is_first_game_run = True
+seen_anomalies_this_run = []  # 중복 방지용 리스트
 
-
+# 페이드 변수
 fade_alpha = 0.0
 transition_target_room = 0
 transition_player_pos_x = 0
 post_fade_delay_timer = 0.0
 
+
+# --- 헬퍼 함수 ---
 def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
     distance_sq = (a_x - b_x) ** 2 + (a_y - b_y) ** 2
     return distance_sq < distance_threshold ** 2
+
 
 def setup_new_room():
     global is_anomaly_present, anomaly_type, seen_anomalies_this_run, is_first_game_run
@@ -32,54 +40,46 @@ def setup_new_room():
         is_first_game_run = False
         print("DEBUG: First run of the game. No Anomaly.")
     else:
+        if random.randint(0, 1) == 0:  # 50% 확률
+            is_anomaly_present = True
 
-        if random.randint(0, 1) == 0:
-           is_anomaly_present = True
+            # 가능한 이상현상 리스트 필터링 (중복 방지)
+            available_anomalies = [a for a in ALL_ANOMALIES if a not in seen_anomalies_this_run]
 
-           available_anomalies = [a for a in ALL_ANOMALIES if a not in seen_anomalies_this_run]
+            if not available_anomalies:
+                print("DEBUG: All anomalies seen. Resetting list.")
+                seen_anomalies_this_run.clear()
+                available_anomalies = list(ALL_ANOMALIES)
 
-           if not available_anomalies:
-              print("DEBUG: All anomalies seen. Resetting list.")
-              seen_anomalies_this_run.clear()
-              available_anomalies = list(ALL_ANOMALIES)
+            anomaly_type = random.choice(available_anomalies)
+            seen_anomalies_this_run.append(anomaly_type)
 
-           anomaly_type  = random.choice(available_anomalies)
-
-           seen_anomalies_this_run.append(anomaly_type)
-
-           print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
-           print(f"DEBUG: Seen so far in this run: {seen_anomalies_this_run}")
-
+            print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
         else:
-           is_anomaly_present = False
-           anomaly_type = 0
-           print("DEBUG: No Anomaly.")
+            is_anomaly_present = False
+            anomaly_type = 0
+            print("DEBUG: No Anomaly.")
 
 
 # --- 1. 초기화 ---
-open_canvas(800, 600)
-player = Boy()
+open_canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
 
-# 1-2. 배경 및 사물 로드
-background = load_image('BACKGROUND.png')
-monalisa_art = load_image('pic_1.png')
-monalisa_smile_art = load_image('pic_1_2.png')
-starry_night_art = load_image('pic_2.png')
-island_art = load_image('pic_3.png')
-eating_planet_art = load_image('pic_4.png')
+# 객체 생성
+player = Boy()
+background_manager = Background()  # 배경 및 그림 관리자
+
+# UI 및 효과 이미지 로드 (이것들은 main에서 관리하거나 별도 UI 클래스로 뺄 수 있음)
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
-hand_print_art = load_image('hand_print.png')
-dark_zone_overlay = load_image('dark.png')
 title_font = load_font('ariblk.ttf', 30)
-ui_font = load_font('ariblk.ttf', 24)
+ui_font = load_font('ariblk.ttf', 24)  # 폰트 파일명 확인 필요 (Arial.ttf 또는 ariblk.ttf)
 
 running = True
 setup_new_room()
 
 # --- 2. 게임 루프 ---
 while running:
-# 3. 이벤트 처리
+    # 3. 이벤트 처리
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -87,13 +87,16 @@ while running:
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
 
+        # [타이틀 화면]
         elif current_state == STATE_TITLE:
-             if event.type == SDL_KEYDOWN:
-                 current_state = STATE_GAMEPLAY
+            if event.type == SDL_KEYDOWN:
+                current_state = STATE_GAMEPLAY
 
+        # [상호작용 E키]
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
             if current_state == STATE_GAMEPLAY:
                 if current_room_index == 0:
+                    # 충돌 체크 (상수는 config.py에서 가져옴)
                     if check_collision(player.x, player.y, MONA_X, MONA_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_MONALISA
@@ -110,15 +113,19 @@ while running:
             elif current_state == STATE_VIEWING_ART:
                 current_state = STATE_GAMEPLAY
                 currently_viewing_art = ART_NONE
-                player.dir_x, player.dir_y = 0, 0
+                player.dir_x, player.dir_y = 0, 0  # 스티키 키 방지
+                get_events()  # 입력 버퍼 비우기
 
+        # [그 외 입력]
         elif current_state != STATE_VIEWING_ART:
             player.handle_event(event)
 
+    # 4. 논리 계산 (업데이트)
     if current_state == STATE_GAMEPLAY:
+        # [1번 방: 탈출/성공 방]
         if current_room_index == 1:
             room_change_status = player.update()
-            if room_change_status == 'PREV':
+            if room_change_status == 'PREV':  # 뒤로 돌아가면 리셋
                 current_state = STATE_FADING_OUT
                 transition_target_room = 0
                 success_count = 0
@@ -126,23 +133,26 @@ while running:
                 transition_player_pos_x = player.boundary_right
                 fade_alpha = 0.0
 
+        # [0번 방: 판단 방]
         elif current_room_index == 0:
             room_change_status = player.update()
 
             if room_change_status == 'NEXT' or room_change_status == 'PREV':
                 is_correct_choice = False
+                # 정답 판별 로직
                 if room_change_status == 'NEXT' and not is_anomaly_present:
                     is_correct_choice = True
                 elif room_change_status == 'PREV' and is_anomaly_present:
                     is_correct_choice = True
+
                 if is_correct_choice:
                     success_count += 1
                 else:
                     success_count = 0
-
-                    seen_anomalies_this_run.clear()
+                    seen_anomalies_this_run.clear()  # 실패 시 리스트 초기화
                     print("DEBUG: Wrong choice! Resetting anomaly list.")
 
+                # 목표 달성 확인
                 if success_count >= FINAL_SUCCESS_COUNT:
                     transition_target_room = 1
                 else:
@@ -178,111 +188,53 @@ while running:
             else:
                 is_anomaly_present, anomaly_type = False, 0
 
-
-
     # 5. 그리기 (렌더링)
     clear_canvas()
-
-    def draw_room_0_art():
-        if anomaly_type == ANOMALY_MONALISA_SMILE:
-            monalisa_smile_art.composite_draw(0, '', MONA_X, MONA_Y + 30, MONA_W, MONA_H)
-        else:
-            monalisa_art.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
-        if anomaly_type == ANOMALY_HAND_PRINT:
-            hand_print_art.composite_draw(0, '', HAND_PRINT_X, HAND_PRINT_Y, HAND_PRINT_W, HAND_PRINT_H)
-            #추후 14개 이상 로직 여기 추가
-
-        starry_night_art.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
-        island_art.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
-        eating_planet_art.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
 
 
     def draw_ui_text():
         if current_room_index == 0:
+            # align='right' 제거하고 좌표로 위치 조정
             ui_font.draw(700, 570, f"{success_count} / {FINAL_SUCCESS_COUNT}", (255, 255, 255))
         elif current_room_index == 1:
             ui_font.draw(720, 570, "EXIT", (0, 255, 0))
 
 
+    # [타이틀]
     if current_state == STATE_TITLE:
-       title_screen_image.draw(400, 300, 800, 600)
-       title_font.draw(180, 100, "press any key to start game", (255, 255, 255))
+        title_screen_image.draw(400, 300, 800, 600)
+        title_font.draw(180, 100, "press any key to start game", (255, 255, 255))
 
-    elif current_state == STATE_GAMEPLAY or current_state == STATE_FADING_OUT:
-       background.draw(400, 300)
-       if current_room_index == 0:
-           draw_room_0_art()
-       elif current_room_index == 1:
-           pass
-       draw_ui_text()
+    # [게임 플레이 / 암전 / 밝아짐 / 딜레이]
+    elif current_state == STATE_GAMEPLAY or current_state == STATE_FADING_OUT or \
+            current_state == STATE_FADING_IN or current_state == STATE_POST_FADE_DELAY:
 
-       if anomaly_type == ANOMALY_PLAYER_GIANT:
-           player.current_w = player.original_w * 3
-           player.current_h = player.original_h * 3
-       else:
-           player.current_w = player.original_w
-           player.current_h = player.original_h
+        # 1. 배경 및 그림 그리기 (background_manager 사용!)
+        # background.py가 그림, 이상현상(손바닥, 어둠)을 모두 처리함
+        background_manager.draw(current_room_index, anomaly_type, player.x)
 
-       if anomaly_type == ANOMALY_DARK_ZONE:
-           dark_zone_start_x = 200
-           dark_zone_end_x = 600
+        # 2. UI 그리기
+        draw_ui_text()
 
-           if dark_zone_start_x < player.x < dark_zone_end_x:
-               dark_zone_overlay.opacify(0.7)  # 70% 정도로 어둡게
-               dark_zone_overlay.draw(400, 300, 800, 600)
-           else:
-               dark_zone_overlay.opacify(0.0)
+        # 3. 캐릭터 거대화 이상현상 처리
+        if anomaly_type == ANOMALY_PLAYER_GIANT:
+            player.current_w = player.original_w * 3
+            player.current_h = player.original_h * 3
+        else:
+            player.current_w = player.original_w
+            player.current_h = player.original_h
 
-       player.draw()
+        # 4. 캐릭터 그리기
+        # 어두운 구역일 때 캐릭터가 보이게 하려면 background_manager 안에서 처리하거나
+        # 여기서 한 번 더 그려줄 수도 있음 (현재 background.py 로직에 맡김)
+        player.draw()
 
-    elif current_state == STATE_FADING_IN or current_state == STATE_POST_FADE_DELAY:
-         background.draw(400, 300)
-         if current_room_index == 0:
-             draw_room_0_art()
-         elif current_room_index == 1:
-             pass
-         draw_ui_text()
-
-         if anomaly_type == ANOMALY_PLAYER_GIANT:
-             player.current_w = player.original_w * 3
-             player.current_h = player.original_h * 3
-         else:
-             player.current_w = player.original_w
-             player.current_h = player.original_h
-
-         if anomaly_type == ANOMALY_DARK_ZONE:
-             dark_zone_start_x = 200
-             dark_zone_end_x = 600
-             if dark_zone_start_x < player.x < dark_zone_end_x:
-                 dark_zone_overlay.opacify(0.7)
-                 dark_zone_overlay.draw(400, 300, 800, 600)
-             else:
-                 dark_zone_overlay.opacify(0.0)
-         if anomaly_type == ANOMALY_DARK_ZONE:
-             if dark_zone_start_x < player.x < dark_zone_end_x:
-                 player.draw()
-
-         player.draw()
-
-
-    # 5-2. 플레이어 그리기
-
+    # [그림 확대 보기]
     elif current_state == STATE_VIEWING_ART:
-        background.draw(400, 300)
+        # background_manager가 확대 보기 로직도 다 가지고 있음!
+        background_manager.draw_zoomed(currently_viewing_art, anomaly_type)
 
-
-        if currently_viewing_art == ART_MONALISA:
-            if anomaly_type == ANOMALY_MONALISA_SMILE:
-                monalisa_smile_art.composite_draw(0, '', 400, 350, mona_large_w, mona_large_h)
-            else:
-                monalisa_art.composite_draw(0, '', 400, 300, mona_large_w, mona_large_h)
-        elif currently_viewing_art == ART_STARRY_NIGHT:
-            starry_night_art.composite_draw(0, '', 400, 300, mona_large_w, mona_large_h)
-        elif currently_viewing_art == ART_ISLAND:
-            island_art.composite_draw(0, '', 400, 300, mona_large_w, mona_large_h)
-        elif currently_viewing_art == ART_EATING_PLANET:
-            eating_planet_art.composite_draw(0, '', 400, 300, mona_large_w, mona_large_h)
-
+    # [페이드 효과]
     if current_state == STATE_FADING_OUT or current_state == STATE_FADING_IN:
         black_pixel.opacify(fade_alpha)
         black_pixel.draw(400, 300, 800, 600)
