@@ -1,7 +1,7 @@
 # main.py
 
 from pico2d import *
-from config import *  # 설정값 및 상수 임포트
+from config import *  
 from boy import Boy
 from background import Background
 import random
@@ -66,13 +66,12 @@ open_canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
 
 # 객체 생성
 player = Boy()
-background_manager = Background()  # 배경 및 그림 관리자
+background_manager = Background()
 
-# UI 및 효과 이미지 로드 (이것들은 main에서 관리하거나 별도 UI 클래스로 뺄 수 있음)
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
 title_font = load_font('ariblk.ttf', 30)
-ui_font = load_font('ariblk.ttf', 24)  # 폰트 파일명 확인 필요 (Arial.ttf 또는 ariblk.ttf)
+ui_font = load_font('ariblk.ttf', 24)
 
 running = True
 setup_new_room()
@@ -96,7 +95,7 @@ while running:
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
             if current_state == STATE_GAMEPLAY:
                 if current_room_index == 0:
-                    # 충돌 체크 (상수는 config.py에서 가져옴)
+
                     if check_collision(player.x, player.y, MONA_X, MONA_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_MONALISA
@@ -113,8 +112,8 @@ while running:
             elif current_state == STATE_VIEWING_ART:
                 current_state = STATE_GAMEPLAY
                 currently_viewing_art = ART_NONE
-                player.dir_x, player.dir_y = 0, 0  # 스티키 키 방지
-                get_events()  # 입력 버퍼 비우기
+                player.dir_x, player.dir_y = 0, 0
+                get_events()
 
         # [그 외 입력]
         elif current_state != STATE_VIEWING_ART:
@@ -125,7 +124,7 @@ while running:
         # [1번 방: 탈출/성공 방]
         if current_room_index == 1:
             room_change_status = player.update()
-            if room_change_status == 'PREV':  # 뒤로 돌아가면 리셋
+            if room_change_status == 'PREV':
                 current_state = STATE_FADING_OUT
                 transition_target_room = 0
                 success_count = 0
@@ -149,7 +148,7 @@ while running:
                     success_count += 1
                 else:
                     success_count = 0
-                    seen_anomalies_this_run.clear()  # 실패 시 리스트 초기화
+                    seen_anomalies_this_run.clear()
                     print("DEBUG: Wrong choice! Resetting anomaly list.")
 
                 # 목표 달성 확인
@@ -194,7 +193,6 @@ while running:
 
     def draw_ui_text():
         if current_room_index == 0:
-            # align='right' 제거하고 좌표로 위치 조정
             ui_font.draw(700, 570, f"{success_count} / {FINAL_SUCCESS_COUNT}", (255, 255, 255))
         elif current_room_index == 1:
             ui_font.draw(720, 570, "EXIT", (0, 255, 0))
@@ -210,7 +208,7 @@ while running:
             current_state == STATE_FADING_IN or current_state == STATE_POST_FADE_DELAY:
 
         # 1. 배경 및 그림 그리기 (background_manager 사용!)
-        # background.py가 그림, 이상현상(손바닥, 어둠)을 모두 처리함
+
         background_manager.draw(current_room_index, anomaly_type, player.x)
 
         # 2. UI 그리기
@@ -225,13 +223,11 @@ while running:
             player.current_h = player.original_h
 
         # 4. 캐릭터 그리기
-        # 어두운 구역일 때 캐릭터가 보이게 하려면 background_manager 안에서 처리하거나
-        # 여기서 한 번 더 그려줄 수도 있음 (현재 background.py 로직에 맡김)
         player.draw()
 
     # [그림 확대 보기]
     elif current_state == STATE_VIEWING_ART:
-        # background_manager가 확대 보기 로직도 다 가지고 있음!
+
         background_manager.draw_zoomed(currently_viewing_art, anomaly_type)
 
     # [페이드 효과]
