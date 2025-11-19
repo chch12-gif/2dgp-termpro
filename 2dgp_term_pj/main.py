@@ -2,73 +2,22 @@
 
 from pico2d import *
 from boy import Boy
+from config import *
 import random
 
-STATE_TITLE = 0
-STATE_GAMEPLAY = 1
-STATE_VIEWING_ART = 2
-STATE_FADING_OUT = 3
-STATE_FADING_IN = 4
-STATE_POST_FADE_DELAY = 5
 current_state = STATE_TITLE
-
-ART_NONE = 0
-ART_MONALISA = 1
-ART_STARRY_NIGHT = 2
-ART_ISLAND = 3
-ART_EATING_PLANET = 4
 currently_viewing_art = ART_NONE
-
 current_room_index = 0
 success_count = 0
-FINAL_SUCCESS_COUNT = 7
-
 is_anomaly_present = False
 anomaly_type = 0
 is_first_game_run = True
 
-ANOMALY_MONALISA_SMILE = 1 #15개 이상현상까지 사용 예정
-ANOMALY_HAND_PRINT = 2
-ANOMALY_PLAYER_GIANT = 3
-ANOMALY_DARK_ZONE = 4
-
-ALL_ANOMALIES = [ANOMALY_MONALISA_SMILE, ANOMALY_HAND_PRINT, ANOMALY_PLAYER_GIANT, ANOMALY_DARK_ZONE]
-seen_anomalies_this_run = []
-
-mona_x = 100
-mona_y = 500
-mona_w = 100
-mona_h = 150
-
-hand_print_x, hand_print_y = 400, 300
-hand_print_w, hand_print_h = 600, 600
-
-starry_night_y = 500
-starry_night_w = 100
-starry_night_h = 150
-starry_night_x = mona_x + (mona_w // 2) + (starry_night_w // 2) + 100
-
-island_x = starry_night_x + (starry_night_w // 2) + (100 // 2) + 100
-island_y = 500
-island_w = 100
-island_h = 150
-
-eating_planet_x = island_x + (island_w // 2) + (100 // 2) + 100
-eating_planet_y = 500
-eating_planet_w = 100
-eating_planet_h = 150
-
-
-
-interaction_distance = 75
-mona_large_w = int(800 * 0.8)
-mona_large_h = int(600 * 0.9)
 
 fade_alpha = 0.0
 transition_target_room = 0
 transition_player_pos_x = 0
 post_fade_delay_timer = 0.0
-POST_FADE_DELAY_TIME = 0.3
 
 def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
     distance_sq = (a_x - b_x) ** 2 + (a_y - b_y) ** 2
@@ -145,16 +94,16 @@ while running:
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
             if current_state == STATE_GAMEPLAY:
                 if current_room_index == 0:
-                    if check_collision(player.x, player.y, mona_x, mona_y, interaction_distance):
+                    if check_collision(player.x, player.y, MONA_X, MONA_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_MONALISA
-                    elif check_collision(player.x, player.y, starry_night_x, starry_night_y, interaction_distance):
+                    elif check_collision(player.x, player.y, STARRY_NIGHT_X, STARRY_NIGHT_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_STARRY_NIGHT
-                    elif check_collision(player.x, player.y, island_x, island_y, interaction_distance):
+                    elif check_collision(player.x, player.y, ISLAND_X, ISLAND_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_ISLAND
-                    elif check_collision(player.x, player.y, eating_planet_x, eating_planet_y, interaction_distance):
+                    elif check_collision(player.x, player.y, EATING_PLANET_X, EATING_PLANET_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_EATING_PLANET
 
@@ -236,16 +185,16 @@ while running:
 
     def draw_room_0_art():
         if anomaly_type == ANOMALY_MONALISA_SMILE:
-            monalisa_smile_art.composite_draw(0, '', mona_x, mona_y + 30, mona_w, mona_h)
+            monalisa_smile_art.composite_draw(0, '', MONA_X, MONA_Y + 30, MONA_W, MONA_H)
         else:
-            monalisa_art.composite_draw(0, '', mona_x, mona_y, mona_w, mona_h)
+            monalisa_art.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
         if anomaly_type == ANOMALY_HAND_PRINT:
-            hand_print_art.composite_draw(0, '', hand_print_x, hand_print_y, hand_print_w, hand_print_h)
+            hand_print_art.composite_draw(0, '', HAND_PRINT_X, HAND_PRINT_Y, HAND_PRINT_W, HAND_PRINT_H)
             #추후 14개 이상 로직 여기 추가
 
-        starry_night_art.composite_draw(0, '', starry_night_x, starry_night_y, starry_night_w, starry_night_h)
-        island_art.composite_draw(0, '', island_x, island_y, island_w, island_h)
-        eating_planet_art.composite_draw(0, '', eating_planet_x, eating_planet_y, eating_planet_w, eating_planet_h)
+        starry_night_art.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
+        island_art.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
+        eating_planet_art.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
 
 
     def draw_ui_text():
