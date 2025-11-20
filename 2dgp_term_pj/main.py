@@ -66,6 +66,10 @@ def setup_new_room():
             anomaly_type = random.choice(available_anomalies)
             seen_anomalies_this_run.append(anomaly_type)
 
+            if anomaly_type == ANOMALY_SHADOW_MAN:
+                global shadow_x
+                shadow_x = 400
+
             print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
         else:
             is_anomaly_present = False
@@ -143,6 +147,23 @@ while running:
                 seen_anomalies_this_run.clear()
                 transition_player_pos_x = player.boundary_right
                 fade_alpha = 0.0
+        if current_room_index == 0 and anomaly_type == ANOMALY_SHADOW_MAN:
+            if player.x > shadow_x:
+                shadow_x += shadow_speed
+                shadow_dir = 1
+            elif player.x < shadow_x:
+                shadow_x -= shadow_speed
+                shadow_dir = -1
+
+            if abs(player.x - shadow_x) < 50 and abs(player.y - 300) < 100:  # Y좌표 300 가정
+                print("CAUGHT BY SHADOW MAN! RESET!")
+                # 충돌 시 리셋 로직
+                current_state = STATE_FADING_OUT
+                transition_target_room = 0
+                success_count = 0
+                seen_anomalies_this_run.clear()
+                transition_player_pos_x = player.boundary_left
+
 
         # [0번 방: 판단 방]
         elif current_room_index == 0:
