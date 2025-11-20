@@ -19,7 +19,7 @@ is_first_game_run = True
 seen_anomalies_this_run = []
 shadow_x = 400
 shadow_y = 300
-shadow_speed = 2
+shadow_speed = 1.0
 shadow_dir = 0
 
 #이상현상 리스트
@@ -168,7 +168,7 @@ while running:
                     shadow_y -= shadow_speed
 
 
-                if abs(player.x - shadow_x) < 50 and abs(player.y - 300) < 100:
+                if abs(player.x - shadow_x) < 35 and abs(player.y - shadow_y) < 70:
                     print("CAUGHT! RESET!")
                     current_state = STATE_FADING_OUT
                     transition_target_room = 0

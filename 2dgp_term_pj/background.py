@@ -26,18 +26,17 @@ class Background:
             if anomaly_type == ANOMALY_HAND_PRINT:
                 self.hand_print.composite_draw(0, '', HAND_PRINT_X, HAND_PRINT_Y, HAND_PRINT_W, HAND_PRINT_H)
 
-            if anomaly_type == ANOMALY_SHADOW_MAN:
-                if shadow_dir == 1:
-                    self.black_man_side.composite_draw(0, '', shadow_x, shadow_y, 100, 200)
-                elif shadow_dir == -1:
-                    self.black_man_side.composite_draw(0, 'h', shadow_x, shadow_y, 100, 200)
-                else:
-                    self.black_man_front.composite_draw(0, '', shadow_x, shadow_y, 100, 200)
-
-
             self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
             self.island.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
             self.eating_planet.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
+
+            if anomaly_type == ANOMALY_SHADOW_MAN:
+                if shadow_dir == 1:
+                    self.black_man_side.composite_draw(0, '', shadow_x, shadow_y, 70, 140)
+                elif shadow_dir == -1:
+                    self.black_man_side.composite_draw(0, 'h', shadow_x, shadow_y, 70, 140)
+                else:
+                    self.black_man_front.composite_draw(0, '', shadow_x, shadow_y, 70, 140)
 
             if anomaly_type == ANOMALY_DARK_ZONE:
                 dark_start, dark_end = 200, 600
