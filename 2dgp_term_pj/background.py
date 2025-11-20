@@ -14,7 +14,7 @@ class Background:
         self.black_man_front = load_image('black_man.png')
         self.black_man_side = load_image('black_man_side.png')
 
-    def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_dir=0):
+    def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0):
         self.image.draw(400, 300)
 
         if room_index == 0:
@@ -28,11 +28,11 @@ class Background:
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
                 if shadow_dir == 1:
-                    self.black_man_side.composite_draw(0, 'h', shadow_x, 300, 100, 200)
+                    self.black_man_side.composite_draw(0, '', shadow_x, shadow_y, 100, 200)
                 elif shadow_dir == -1:
-                    self.black_man_side.composite_draw(0, '', shadow_x, 300, 100, 200)
+                    self.black_man_side.composite_draw(0, 'h', shadow_x, shadow_y, 100, 200)
                 else:
-                    self.black_man_front.composite_draw(0, '', shadow_x, 300, 100, 200)
+                    self.black_man_front.composite_draw(0, '', shadow_x, shadow_y, 100, 200)
 
 
             self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)

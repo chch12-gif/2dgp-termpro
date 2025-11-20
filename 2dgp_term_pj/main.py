@@ -18,6 +18,7 @@ anomaly_type = 0
 is_first_game_run = True
 seen_anomalies_this_run = []
 shadow_x = 400
+shadow_y = 300
 shadow_speed = 2
 shadow_dir = 0
 
@@ -44,7 +45,7 @@ def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
 
 
 def setup_new_room():
-    global is_anomaly_present, anomaly_type, seen_anomalies_this_run, is_first_game_run
+    global is_anomaly_present, anomaly_type, seen_anomalies_this_run, is_first_game_run, shadow_x, shadow_y
 
     if is_first_game_run:
         is_anomaly_present = False
@@ -69,6 +70,7 @@ def setup_new_room():
             if anomaly_type == ANOMALY_SHADOW_MAN:
                 global shadow_x
                 shadow_x = 400
+                shadow_y = 300
 
             print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
         else:
@@ -147,27 +149,29 @@ while running:
                 seen_anomalies_this_run.clear()
                 transition_player_pos_x = player.boundary_right
                 fade_alpha = 0.0
-        if current_room_index == 0 and anomaly_type == ANOMALY_SHADOW_MAN:
-            if player.x > shadow_x:
-                shadow_x += shadow_speed
-                shadow_dir = 1
-            elif player.x < shadow_x:
-                shadow_x -= shadow_speed
-                shadow_dir = -1
-
-            if abs(player.x - shadow_x) < 50 and abs(player.y - 300) < 100:  # Y좌표 300 가정
-                print("CAUGHT BY SHADOW MAN! RESET!")
-                # 충돌 시 리셋 로직
-                current_state = STATE_FADING_OUT
-                transition_target_room = 0
-                success_count = 0
-                seen_anomalies_this_run.clear()
-                transition_player_pos_x = player.boundary_left
 
 
         # [0번 방: 판단 방]
         elif current_room_index == 0:
             room_change_status = player.update()
+
+            if anomaly_type == ANOMALY_SHADOW_MAN:
+                if player.x > shadow_x:
+                   shadow_x += shadow_speed
+                   shadow_dir = 1
+                elif player.x < shadow_x:
+                   shadow_x -= shadow_speed
+                   shadow_dir = -1
+
+                if abs(player.x - shadow_x) < 50 and abs(player.y - 300) < 100:
+                    print("CAUGHT! RESET!")
+                    current_state = STATE_FADING_OUT
+                    transition_target_room = 0
+                    success_count = 0
+                    seen_anomalies_this_run.clear()
+                    transition_player_pos_x = player.boundary_left
+                    fade_alpha = 0.0
+
 
             if room_change_status == 'NEXT' or room_change_status == 'PREV':
                 is_correct_choice = False
@@ -242,7 +246,7 @@ while running:
 
         # 1. 배경 및 그림 그리기 (background_manager 사용!)
 
-        background_manager.draw(current_room_index, anomaly_type, player.x)
+        background_manager.draw(current_room_index, anomaly_type, player.x, shadow_x, shadow_dir)
 
         # 2. UI 그리기
         draw_ui_text()
