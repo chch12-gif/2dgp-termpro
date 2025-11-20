@@ -162,6 +162,11 @@ while running:
                 elif player.x < shadow_x:
                    shadow_x -= shadow_speed
                    shadow_dir = -1
+                if player.y > shadow_y:
+                    shadow_y += shadow_speed
+                elif player.y < shadow_y:
+                    shadow_y -= shadow_speed
+
 
                 if abs(player.x - shadow_x) < 50 and abs(player.y - 300) < 100:
                     print("CAUGHT! RESET!")
@@ -246,7 +251,7 @@ while running:
 
         # 1. 배경 및 그림 그리기 (background_manager 사용!)
 
-        background_manager.draw(current_room_index, anomaly_type, player.x, shadow_x, shadow_dir)
+        background_manager.draw(current_room_index, anomaly_type, player.x, shadow_x, shadow_y, shadow_dir)
 
         # 2. UI 그리기
         draw_ui_text()
