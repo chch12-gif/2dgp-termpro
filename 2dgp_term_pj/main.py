@@ -16,7 +16,19 @@ success_count = 0
 is_anomaly_present = False
 anomaly_type = 0
 is_first_game_run = True
-seen_anomalies_this_run = []  # 중복 방지용 리스트
+seen_anomalies_this_run = []
+shadow_x = 400
+shadow_speed = 2
+shadow_dir = 0
+
+#이상현상 리스트
+ALL_ANOMALIES = [
+    ANOMALY_MONALISA_SMILE,
+    ANOMALY_HAND_PRINT,
+    ANOMALY_PLAYER_GIANT,
+    ANOMALY_DARK_ZONE,
+    ANOMALY_SHADOW_MAN
+]
 
 # 페이드 변수
 fade_alpha = 0.0
