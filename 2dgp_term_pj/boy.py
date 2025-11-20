@@ -76,27 +76,58 @@ class Boy:
                 self.current_speed = self.walk_speed
 
 
-    def update(self):
+    def update(self, obstacles=[]):
 
         potential_y = self.y + self.dir_y * self.current_speed
-        if self.boundary_bottom <= potential_y <= self.boundary_top:
-            self.y = potential_y
 
-        potential_x = self.x + self.dir_x * self.current_speed
+        collided_x = False
+        for obs in obstacles:
+            
+            ox, oy, ow, oh = obs
 
-        if potential_x > self.boundary_right and self.dir_x > 0:
-            self.x = self.boundary_right
-            return 'NEXT'
 
-        elif potential_x < self.boundary_left and self.dir_x < 0:
-            self.x = self.boundary_left
-            return 'PREV'
-        self.x = potential_x
+            if abs(potential_x - ox) < (self.current_w + ow) / 2 and \
+                    abs(self.y - oy) < (self.current_h + oh) / 2:
+                collided_x = True
+                break
 
-        if self.x < self.boundary_left:
-            self.x = self.boundary_left
-        elif self.x > self.boundary_right:
-            self.x = self.boundary_right
+
+        if not collided_x:
+            if potential_x > self.boundary_right and self.dir_x > 0:
+                self.x = self.boundary_right
+                return 'NEXT'
+            elif potential_x < self.boundary_left and self.dir_x < 0:
+                self.x = self.boundary_left
+                return 'PREV'
+
+
+            self.x = potential_x
+
+
+            if self.x < self.boundary_left:
+                self.x = self.boundary_left
+            elif self.x > self.boundary_right:
+                self.x = self.boundary_right
+
+
+        potential_y = self.y + self.dir_y * self.current_speed
+
+
+        collided_y = False
+        for obs in obstacles:
+            ox, oy, ow, oh = obs
+
+
+            if abs(self.x - ox) < (self.current_w + ow) / 2 and \
+                    abs(potential_y - oy) < (self.current_h + oh) / 2:
+                collided_y = True
+                break
+
+
+        if not collided_y:
+            if self.boundary_bottom <= potential_y <= self.boundary_top:
+                self.y = potential_y
+
 
         if self.running_state and (self.dir_x != 0 or self.dir_y != 0):
             self.animation_frame = int(get_time() * 10) % 2
