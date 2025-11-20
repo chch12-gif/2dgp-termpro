@@ -55,7 +55,7 @@ class Background:
 
         if viewing_art_id == ART_MONALISA:
             if anomaly_type == ANOMALY_MONALISA_SMILE:
-                self.monalisa_smile.composite_draw(0, '', 400, 350, MONA_LARGE_W, MONA_LARGE_H)
+                self.monalisa_smile.composite_draw(0, '', 400, 400, MONA_LARGE_W, MONA_LARGE_H)
             else:
                 self.monalisa.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
 
