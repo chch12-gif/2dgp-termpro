@@ -13,6 +13,7 @@ class Background:
         self.dark_zone_overlay = load_image('dark.png')
         self.black_man_front = load_image('black_man.png')
         self.black_man_side = load_image('black_man_side.png')
+        self.venus = load_image('venus.png')
 
     def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0):
         self.image.draw(400, 300)
@@ -29,6 +30,7 @@ class Background:
             self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
             self.island.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
             self.eating_planet.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
+            self.venus.composite_draw(0, '', VENUS_X, VENUS_Y, VENUS_W, VENUS_H)
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
                 if shadow_dir == 1:
@@ -65,4 +67,7 @@ class Background:
 
         elif viewing_art_id == ART_EATING_PLANET:
             self.eating_planet.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+
+        elif viewing_art_id == ART_VENUS:
+            self.venus.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
 
