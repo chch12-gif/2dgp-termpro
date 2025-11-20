@@ -11,8 +11,10 @@ class Background:
         self.eating_planet = load_image('pic_4.png')
         self.hand_print = load_image('hand_print.png')
         self.dark_zone_overlay = load_image('dark.png')
+        self.black_man_front = load_image('black_man.png')
+        self.black_man_side = load_image('black_man_side.png')
 
-    def draw(self, room_index, anomaly_type, player_x):
+    def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_dir=0):
         self.image.draw(400, 300)
 
         if room_index == 0:
