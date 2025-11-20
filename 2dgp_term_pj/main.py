@@ -126,7 +126,7 @@ while running:
                     elif check_collision(player.x, player.y, EATING_PLANET_X, EATING_PLANET_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_EATING_PLANET
-                    elif check_collision(player.x, player.y, VENUS_X, VENUS_Y, INTERACTION_DISTANCE):
+                    elif check_collision(player.x, player.y, VENUS_X, VENUS_Y, 100):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_VENUS
 
