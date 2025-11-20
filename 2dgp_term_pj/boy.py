@@ -78,11 +78,12 @@ class Boy:
 
     def update(self, obstacles=[]):
 
+        potential_x = self.x + self.dir_x * self.current_speed
         potential_y = self.y + self.dir_y * self.current_speed
 
         collided_x = False
         for obs in obstacles:
-            
+
             ox, oy, ow, oh = obs
 
 
@@ -110,7 +111,7 @@ class Boy:
                 self.x = self.boundary_right
 
 
-        potential_y = self.y + self.dir_y * self.current_speed
+
 
 
         collided_y = False

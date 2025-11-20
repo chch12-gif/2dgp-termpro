@@ -142,9 +142,12 @@ while running:
 
     # 4. 논리 계산 (업데이트)
     if current_state == STATE_GAMEPLAY:
+        current_obstacles = []
+
         # [1번 방: 탈출/성공 방]
         if current_room_index == 1:
-            room_change_status = player.update()
+
+            room_change_status = player.update(current_obstacles)
             if room_change_status == 'PREV':
                 current_state = STATE_FADING_OUT
                 transition_target_room = 0
@@ -156,7 +159,9 @@ while running:
 
         # [0번 방: 판단 방]
         elif current_room_index == 0:
-            room_change_status = player.update()
+
+            current_obstacles.append((VENUS_X, VENUS_Y, VENUS_W * 0.6, VENUS_H * 0.3))
+            room_change_status = player.update(current_obstacles)
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
                 if player.x > shadow_x:
