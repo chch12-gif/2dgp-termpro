@@ -220,6 +220,13 @@ while running:
             fade_alpha = 1.0
             current_room_index = transition_target_room
             player.x = transition_player_pos_x
+            if anomaly_type == ANOMALY_PLAYER_GIANT:
+                player.y = 300
+                if player.x < 400:
+                    player.x = 100
+                else:
+                    player.x = 700
+
             current_state = STATE_FADING_IN
 
     elif current_state == STATE_FADING_IN:
