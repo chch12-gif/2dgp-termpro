@@ -1,7 +1,7 @@
 # main.py
 
 from pico2d import *
-from config import *  
+from config import *
 from boy import Boy
 from background import Background
 import random
