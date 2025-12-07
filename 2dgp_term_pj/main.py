@@ -170,7 +170,7 @@ while running:
             else:
                 obs_x, obs_y = VENUS_X, VENUS_Y
 
-            current_obstacles.append((VENUS_X, VENUS_Y, VENUS_W * 0.6, VENUS_H * 0.3))
+            current_obstacles.append((obs_x, obs_y, VENUS_W * 0.6, VENUS_H * 0.3))
             room_change_status = player.update(current_obstacles)
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
@@ -230,7 +230,14 @@ while running:
         if fade_alpha >= 1.0:
             fade_alpha = 1.0
             current_room_index = transition_target_room
+            if current_room_index == 0:
+                setup_new_room()
+            else:
+                is_anomaly_present = False
+                anomaly_type = 0
+
             player.x = transition_player_pos_x
+
             if anomaly_type == ANOMALY_PLAYER_GIANT:
                 player.y = 300
                 if player.x < 400:
@@ -250,10 +257,7 @@ while running:
     elif current_state == STATE_POST_FADE_DELAY:
         if get_time() - post_fade_delay_timer > POST_FADE_DELAY_TIME:
             current_state = STATE_GAMEPLAY
-            if current_room_index == 0:
-                setup_new_room()
-            else:
-                is_anomaly_present, anomaly_type = False, 0
+
 
     # 5. 그리기 (렌더링)
     clear_canvas()
@@ -292,6 +296,8 @@ while running:
 
         # 4. 캐릭터 그리기
         player.draw()
+
+        background_manager.draw_foreground(current_room_index, anomaly_type)
 
     # [그림 확대 보기]
     elif current_state == STATE_VIEWING_ART:

@@ -30,7 +30,7 @@ class Background:
             self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
             self.island.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
             self.eating_planet.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
-            self.venus.composite_draw(0, '', VENUS_X, VENUS_Y, VENUS_W, VENUS_H)
+
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
                 if shadow_dir == 1:
@@ -49,6 +49,16 @@ class Background:
                     self.dark_zone_overlay.opacify(0.0)
         elif room_index == 1:
             pass
+
+    def draw_foreground(self, room_index, anomaly_type):
+        if room_index == 0:
+            if anomaly_type == ANOMALY_VENUS_CENTER:
+                draw_x = VENUS_CENTER_X
+                draw_y = VENUS_CENTER_Y
+            else:
+                draw_x = VENUS_X
+                draw_y = VENUS_Y
+
 
     def draw_zoomed(self, viewing_art_id, anomaly_type):
         self.image.draw(400, 300)
