@@ -30,7 +30,8 @@ ALL_ANOMALIES = [
     ANOMALY_DARK_ZONE,
     ANOMALY_SHADOW_MAN,
     ANOMALY_VENUS_CENTER,
-    ANOMALY_ALL_SAME
+    ANOMALY_ALL_SAME,
+    ANOMALY_ALL_GONE
 ]
 
 # 페이드 변수
@@ -122,26 +123,28 @@ while running:
             if current_state == STATE_GAMEPLAY:
                 if current_room_index == 0:
 
-                    if check_collision(player.x, player.y, MONA_X, MONA_Y, INTERACTION_DISTANCE):
-                        current_state = STATE_VIEWING_ART
-                        currently_viewing_art = ART_MONALISA
-                    elif check_collision(player.x, player.y, STARRY_NIGHT_X, STARRY_NIGHT_Y, INTERACTION_DISTANCE):
-                        current_state = STATE_VIEWING_ART
-                        currently_viewing_art = ART_STARRY_NIGHT
-                    elif check_collision(player.x, player.y, ISLAND_X, ISLAND_Y, INTERACTION_DISTANCE):
-                        current_state = STATE_VIEWING_ART
-                        currently_viewing_art = ART_ISLAND
-                    elif check_collision(player.x, player.y, EATING_PLANET_X, EATING_PLANET_Y, INTERACTION_DISTANCE):
-                        current_state = STATE_VIEWING_ART
-                        currently_viewing_art = ART_EATING_PLANET
-                    else:
-                        if anomaly_type == ANOMALY_VENUS_CENTER:
-                            target_venus_x, target_venus_y = VENUS_CENTER_X, VENUS_CENTER_Y
-                        else:
-                            target_venus_x, target_venus_y = VENUS_X, VENUS_Y
-                        if check_collision(player.x, player.y, target_venus_x, target_venus_y, 200):
-                            current_state = STATE_VIEWING_ART
-                            currently_viewing_art = ART_VENUS
+                    if anomaly_type != ANOMALY_ALL_GONE:
+
+                      if check_collision(player.x, player.y, MONA_X, MONA_Y, INTERACTION_DISTANCE):
+                          current_state = STATE_VIEWING_ART
+                          currently_viewing_art = ART_MONALISA
+                      elif check_collision(player.x, player.y, STARRY_NIGHT_X, STARRY_NIGHT_Y, INTERACTION_DISTANCE):
+                          current_state = STATE_VIEWING_ART
+                          currently_viewing_art = ART_STARRY_NIGHT
+                      elif check_collision(player.x, player.y, ISLAND_X, ISLAND_Y, INTERACTION_DISTANCE):
+                          current_state = STATE_VIEWING_ART
+                          currently_viewing_art = ART_ISLAND
+                      elif check_collision(player.x, player.y, EATING_PLANET_X, EATING_PLANET_Y, INTERACTION_DISTANCE):
+                          current_state = STATE_VIEWING_ART
+                          currently_viewing_art = ART_EATING_PLANET
+                      else:
+                          if anomaly_type == ANOMALY_VENUS_CENTER:
+                              target_venus_x, target_venus_y = VENUS_CENTER_X, VENUS_CENTER_Y
+                          else:
+                              target_venus_x, target_venus_y = VENUS_X, VENUS_Y
+                          if check_collision(player.x, player.y, target_venus_x, target_venus_y, 200):
+                              current_state = STATE_VIEWING_ART
+                              currently_viewing_art = ART_VENUS
 
             elif current_state == STATE_VIEWING_ART:
                 current_state = STATE_GAMEPLAY
@@ -172,12 +175,15 @@ while running:
 
         # [0번 방: 판단 방]
         elif current_room_index == 0:
-            if anomaly_type == ANOMALY_VENUS_CENTER:
-                obs_x, obs_y = VENUS_CENTER_X, VENUS_CENTER_Y
-            else:
-                obs_x, obs_y = VENUS_X, VENUS_Y
 
-            current_obstacles.append((obs_x, obs_y, VENUS_W * 0.6, VENUS_H * 0.3))
+            if anomaly_type != ANOMALY_ALL_GONE:
+                if anomaly_type == ANOMALY_VENUS_CENTER:
+                    obs_x, obs_y = VENUS_CENTER_X, VENUS_CENTER_Y
+                else:
+                    obs_x, obs_y = VENUS_X, VENUS_Y
+
+                current_obstacles.append((obs_x, obs_y, VENUS_W * 0.6, VENUS_H * 0.3))
+
             room_change_status = player.update(current_obstacles)
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
@@ -246,7 +252,7 @@ while running:
             player.x = transition_player_pos_x
 
             if anomaly_type == ANOMALY_PLAYER_GIANT:
-                player.y = 300
+                player.y = 350
                 if player.x < 400:
                     player.x = 100
                 else:
