@@ -101,7 +101,7 @@ class Background:
             else:
                 self.monalisa.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
 
-        
+
 
         elif viewing_art_id == ART_ISLAND:
             self.island.composite_draw(0, '', 450, 300, MONA_LARGE_W, MONA_LARGE_H)
