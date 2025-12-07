@@ -63,6 +63,8 @@ class Background:
 
     def draw_foreground(self, room_index, anomaly_type):
         if room_index == 0:
+            if anomaly_type == ANOMALY_ALL_GONE:
+                return
             if anomaly_type == ANOMALY_VENUS_CENTER:
                 dx = VENUS_CENTER_X
                 dy = VENUS_CENTER_Y
