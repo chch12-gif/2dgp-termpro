@@ -14,6 +14,7 @@ class Background:
         self.black_man_front = load_image('black_man.png')
         self.black_man_side = load_image('black_man_side.png')
         self.venus = load_image('venus.png')
+        self.msg_font = load_font('ariblk.ttf', 40)
 
     def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0):
         self.image.draw(400, 300)
