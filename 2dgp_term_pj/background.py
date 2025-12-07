@@ -16,7 +16,7 @@ class Background:
         self.venus = load_image('venus.png')
         self.msg_font = load_font('ariblk.ttf', 40)
 
-    def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0):
+    def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0, msg_count=0):
         self.image.draw(400, 300)
 
         if room_index == 0:
@@ -30,6 +30,10 @@ class Background:
                 self.monalisa.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
 
             else:
+              if anomaly_type == ANOMALY_LEAVE_MSG:
+                  full_text = "L E A V E   N O W"
+                  text_to_draw = full_text[:msg_count]
+                  self.msg_font.draw(250, 200, text_to_draw, (255, 0, 0))
 
               if anomaly_type == ANOMALY_MONALISA_SMILE:
                 self.monalisa_smile.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)

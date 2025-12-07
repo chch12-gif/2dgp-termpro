@@ -22,6 +22,11 @@ shadow_y = 300
 shadow_speed = 1.0
 shadow_dir = 0
 
+#메세지 이상현상 변수
+msg_timer = 0.0
+msg_count = 0
+msg_triggered = False
+
 #이상현상 리스트
 ALL_ANOMALIES = [
     ANOMALY_MONALISA_SMILE,
