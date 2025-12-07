@@ -28,7 +28,8 @@ ALL_ANOMALIES = [
     ANOMALY_HAND_PRINT,
     ANOMALY_PLAYER_GIANT,
     ANOMALY_DARK_ZONE,
-    ANOMALY_SHADOW_MAN
+    ANOMALY_SHADOW_MAN,
+    ANOMALY_VENUS_CENTER
 ]
 
 # 페이드 변수
@@ -126,9 +127,14 @@ while running:
                     elif check_collision(player.x, player.y, EATING_PLANET_X, EATING_PLANET_Y, INTERACTION_DISTANCE):
                         current_state = STATE_VIEWING_ART
                         currently_viewing_art = ART_EATING_PLANET
-                    elif check_collision(player.x, player.y, VENUS_X, VENUS_Y, 150):
-                        current_state = STATE_VIEWING_ART
-                        currently_viewing_art = ART_VENUS
+                    else:
+                        if anomaly_type == ANOMALY_VENUS_CENTER:
+                            target_venus_x, target_venus_y = VENUS_CENTER_X, VENUS_CENTER_Y
+                        else:
+                            target_venus_x, target_venus_y = VENUS_X, VENUS_Y
+                        if check_collision(player.x, player.y, target_venus_x, target_venus_y, 200):
+                            current_state = STATE_VIEWING_ART
+                            currently_viewing_art = ART_VENUS
 
             elif current_state == STATE_VIEWING_ART:
                 current_state = STATE_GAMEPLAY
@@ -159,6 +165,10 @@ while running:
 
         # [0번 방: 판단 방]
         elif current_room_index == 0:
+            if anomaly_type == ANOMALY_VENUS_CENTER:
+                obs_x, obs_y = VENUS_CENTER_X, VENUS_CENTER_Y
+            else:
+                obs_x, obs_y = VENUS_X, VENUS_Y
 
             current_obstacles.append((VENUS_X, VENUS_Y, VENUS_W * 0.6, VENUS_H * 0.3))
             room_change_status = player.update(current_obstacles)
@@ -174,6 +184,7 @@ while running:
                     shadow_y += shadow_speed
                 elif player.y < shadow_y:
                     shadow_y -= shadow_speed
+
 
 
                 if abs(player.x - shadow_x) < 35 and abs(player.y - shadow_y) < 70:
