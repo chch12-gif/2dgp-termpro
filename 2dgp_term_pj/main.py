@@ -104,6 +104,7 @@ black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
+inst_font = load_font('ariblk.ttf',20)
 title_bgm = load_music('bgm_1.mp3')
 game_bgm = load_music('bgm_2.mp3')
 title_bgm.set_volume(32)
@@ -125,9 +126,13 @@ while running:
         # [타이틀 화면]
         elif current_state == STATE_TITLE:
             if event.type == SDL_KEYDOWN:
+                current_state = STATE_INSTRUCTIONS
+        elif current_state == STATE_INSTRUCTIONS:
+            if event.type == SDL_KEYDOWN:
                 current_state = STATE_GAMEPLAY
                 title_bgm.stop()
                 game_bgm.repeat_play()
+
 
         # [상호작용 E키]
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
@@ -310,6 +315,22 @@ while running:
     if current_state == STATE_TITLE:
         title_screen_image.draw(400, 300, 800, 600)
         title_font.draw(180, 100, "press any key to start game", (255, 255, 255))
+    elif current_state == STATE_INSTRUCTIONS:
+        black_pixel.opacify(1.0)
+        black_pixel.draw(400, 300, 800, 600)
+
+        inst_font.draw(50, 480, "You were in a strange space for an unknown reason", (255, 255, 255))
+        inst_font.draw(50, 450, "while you were looking at an art gallery.", (255, 255, 255))
+
+        inst_font.draw(50, 400, "You have to go through seven rooms", (255, 255, 255))
+        inst_font.draw(50, 370, "to escape from that space.", (255, 255, 255))
+
+        inst_font.draw(50, 320, "Move: Arrow Keys | Dash: SHIFT | Interact: E", (255, 255, 255))
+
+        inst_font.draw(50, 270, "Move to the LEFT if you find an 'abnormal phenomenon',", (255, 255, 255))
+        inst_font.draw(50, 240, "and to the RIGHT if you do not find it.", (255, 255, 255))
+
+        title_font.draw(200, 100, "'Press Any Key to Start'", (255, 255, 255))
 
     # [게임 플레이 / 암전 / 밝아짐 / 딜레이]
     elif current_state == STATE_GAMEPLAY or current_state == STATE_FADING_OUT or \
