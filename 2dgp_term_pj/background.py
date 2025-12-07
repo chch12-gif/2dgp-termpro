@@ -40,17 +40,19 @@ class Background:
                 self.monalisa_smile.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
               else:
                 self.monalisa.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
+
               if anomaly_type == ANOMALY_STARRY_NIGHT_HORROR:
-                  self.starry_night_horror.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W,STARRY_NIGHT_H)
+                  target_image = self.starry_night_horror
               else:
-                  self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W,STARRY_NIGHT_H)
+                  target_image = self.starry_night
+              target_image.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
 
 
 
               if anomaly_type == ANOMALY_HAND_PRINT:
                 self.hand_print.composite_draw(0, '', HAND_PRINT_X, HAND_PRINT_Y, HAND_PRINT_W, HAND_PRINT_H)
 
-              self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
+
               self.island.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
               self.eating_planet.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
 
@@ -99,8 +101,7 @@ class Background:
             else:
                 self.monalisa.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
 
-        elif viewing_art_id == ART_STARRY_NIGHT:
-            self.starry_night.composite_draw(0, '', 420, 300, MONA_LARGE_W, MONA_LARGE_H)
+        
 
         elif viewing_art_id == ART_ISLAND:
             self.island.composite_draw(0, '', 450, 300, MONA_LARGE_W, MONA_LARGE_H)
