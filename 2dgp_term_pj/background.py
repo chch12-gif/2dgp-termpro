@@ -15,6 +15,7 @@ class Background:
         self.black_man_side = load_image('black_man_side.png')
         self.venus = load_image('venus.png')
         self.msg_font = load_font('ariblk.ttf', 40)
+        self.starry_night_horror = load_image('pic_5.png')
 
     def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0, msg_count=0):
         self.image.draw(400, 300)
@@ -39,6 +40,12 @@ class Background:
                 self.monalisa_smile.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
               else:
                 self.monalisa.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
+              if anomaly_type == ANOMALY_STARRY_NIGHT_HORROR:
+                  self.starry_night_horror.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W,STARRY_NIGHT_H)
+              else:
+                  self.starry_night.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W,STARRY_NIGHT_H)
+
+
 
               if anomaly_type == ANOMALY_HAND_PRINT:
                 self.hand_print.composite_draw(0, '', HAND_PRINT_X, HAND_PRINT_Y, HAND_PRINT_W, HAND_PRINT_H)
@@ -103,4 +110,12 @@ class Background:
 
         elif viewing_art_id == ART_VENUS:
             self.venus.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+
+        elif viewing_art_id == ART_STARRY_NIGHT:
+            if anomaly_type == ANOMALY_STARRY_NIGHT_HORROR:
+                self.starry_night_horror.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+            else:
+                self.starry_night.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+
+
 
