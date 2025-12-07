@@ -17,6 +17,7 @@ class Background:
 
     def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0):
         self.image.draw(400, 300)
+        if anomaly_type == ANOMALY_ALL_SAME:
 
         if room_index == 0:
             if anomaly_type == ANOMALY_MONALISA_SMILE:
