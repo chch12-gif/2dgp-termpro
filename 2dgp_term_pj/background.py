@@ -53,11 +53,13 @@ class Background:
     def draw_foreground(self, room_index, anomaly_type):
         if room_index == 0:
             if anomaly_type == ANOMALY_VENUS_CENTER:
-                draw_x = VENUS_CENTER_X
-                draw_y = VENUS_CENTER_Y
+                dx = VENUS_CENTER_X
+                dy = VENUS_CENTER_Y
             else:
-                draw_x = VENUS_X
-                draw_y = VENUS_Y
+                dx = VENUS_X
+                dy = VENUS_Y
+
+            self.venus.composite_draw(0, '', dx, dy, VENUS_W, VENUS_H)
 
 
     def draw_zoomed(self, viewing_art_id, anomaly_type):
