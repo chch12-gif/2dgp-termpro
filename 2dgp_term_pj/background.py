@@ -19,11 +19,15 @@ class Background:
         self.image.draw(400, 300)
 
         if room_index == 0:
-            if anomaly_type == ANOMALY_ALL_SAME:
+            if anomaly_type == ANOMALY_ALL_GONE:
+                pass
+
+            elif anomaly_type == ANOMALY_ALL_SAME:
                 self.monalisa.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
                 self.monalisa.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
                 self.monalisa.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
                 self.monalisa.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
+
             else:
 
               if anomaly_type == ANOMALY_MONALISA_SMILE:
@@ -82,13 +86,13 @@ class Background:
                 self.monalisa.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
 
         elif viewing_art_id == ART_STARRY_NIGHT:
-            self.starry_night.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+            self.starry_night.composite_draw(0, '', 420, 300, MONA_LARGE_W, MONA_LARGE_H)
 
         elif viewing_art_id == ART_ISLAND:
-            self.island.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+            self.island.composite_draw(0, '', 450, 300, MONA_LARGE_W, MONA_LARGE_H)
 
         elif viewing_art_id == ART_EATING_PLANET:
-            self.eating_planet.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+            self.eating_planet.composite_draw(0, '', 450, 350, MONA_LARGE_W, MONA_LARGE_H)
 
         elif viewing_art_id == ART_VENUS:
             self.venus.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
