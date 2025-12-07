@@ -81,6 +81,11 @@ def setup_new_room():
                 shadow_x = 400
                 shadow_y = 300
 
+            if anomaly_type == ANOMALY_LEAVE_MSG:
+                msg_count = 0
+                msg_timer = 0.0
+                msg_triggered = False
+
             print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
         else:
             is_anomaly_present = False
@@ -192,6 +197,18 @@ while running:
 
             room_change_status = player.update(current_obstacles)
 
+            if anomaly_type == ANOMALY_LEAVE_MSG:
+                if not msg_triggered and player.x > 260:
+                    msg_triggered = True
+
+                if msg_triggered:
+                    msg_timer += 0.01
+                    if msg_timer > 0.15:
+                        msg_count += 1
+                        msg_timer = 0
+                        if msg_count > 15: msg_count = 20
+
+
             if anomaly_type == ANOMALY_SHADOW_MAN:
                 if player.x > shadow_x:
                    shadow_x += shadow_speed
@@ -300,7 +317,7 @@ while running:
 
         # 1. 배경 및 그림 그리기 (background_manager 사용!)
 
-        background_manager.draw(current_room_index, anomaly_type, player.x, shadow_x, shadow_y, shadow_dir)
+        background_manager.draw(current_room_index, anomaly_type, player.x, shadow_x, shadow_y, shadow_dir, msg_count)
 
         # 2. UI 그리기
         draw_ui_text()

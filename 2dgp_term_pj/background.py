@@ -33,7 +33,7 @@ class Background:
               if anomaly_type == ANOMALY_LEAVE_MSG:
                   full_text = "L E A V E   N O W"
                   text_to_draw = full_text[:msg_count]
-                  self.msg_font.draw(250, 200, text_to_draw, (255, 0, 0))
+                  self.msg_font.draw(250, 200, text_to_draw, (0, 0, 0))
 
               if anomaly_type == ANOMALY_MONALISA_SMILE:
                 self.monalisa_smile.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
