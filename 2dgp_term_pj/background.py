@@ -17,9 +17,14 @@ class Background:
 
     def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0):
         self.image.draw(400, 300)
-        if anomaly_type == ANOMALY_ALL_SAME:
 
         if room_index == 0:
+            if anomaly_type == ANOMALY_ALL_SAME:
+                self.monalisa.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
+                self.monalisa.composite_draw(0, '', STARRY_NIGHT_X, STARRY_NIGHT_Y, STARRY_NIGHT_W, STARRY_NIGHT_H)
+                self.monalisa.composite_draw(0, '', ISLAND_X, ISLAND_Y, ISLAND_W, ISLAND_H)
+                self.monalisa.composite_draw(0, '', EATING_PLANET_X, EATING_PLANET_Y, EATING_PLANET_W, EATING_PLANET_H)
+
             if anomaly_type == ANOMALY_MONALISA_SMILE:
                 self.monalisa_smile.composite_draw(0, '', MONA_X, MONA_Y, MONA_W, MONA_H)
             else:
@@ -65,6 +70,9 @@ class Background:
 
     def draw_zoomed(self, viewing_art_id, anomaly_type):
         self.image.draw(400, 300)
+        if anomaly_type == ANOMALY_ALL_SAME and viewing_art_id != ART_VENUS:
+            self.monalisa.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+            return
 
         if viewing_art_id == ART_MONALISA:
             if anomaly_type == ANOMALY_MONALISA_SMILE:
