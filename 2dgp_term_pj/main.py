@@ -92,7 +92,11 @@ black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
-
+title_bgm = load_music('bgm_1.mp3')
+game_bgm = load_music('bgm_2.mp3')
+title_bgm.set_volume(32)
+game_bgm.set_volume(32)
+title_bgm.repeat_play()
 running = True
 setup_new_room()
 
@@ -110,6 +114,8 @@ while running:
         elif current_state == STATE_TITLE:
             if event.type == SDL_KEYDOWN:
                 current_state = STATE_GAMEPLAY
+                title_bgm.stop()
+                game_bgm.repeat_play()
 
         # [상호작용 E키]
         elif event.type == SDL_KEYDOWN and event.key == SDLK_e:
