@@ -248,6 +248,13 @@ while running:
                         switch_se.play()
                         is_lights_off = False
 
+            if anomaly_type == ANOMALY_BREAK_SOUND:
+                if not break_sound_triggered and player.x > 400:
+                    if not break_sound_triggered and player.x > 400:
+                        break_se.play()
+                    break_sound_triggered = True
+                    print("DEBUG: Break sound triggered.")
+
 
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
