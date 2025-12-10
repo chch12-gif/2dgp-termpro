@@ -29,6 +29,7 @@ msg_triggered = False
 
 is_lights_off = False
 is_game_bgm_playing = False
+break_sound_triggered = False
 
 #이상현상 리스트
 ALL_ANOMALIES = [
@@ -43,7 +44,8 @@ ALL_ANOMALIES = [
     ANOMALY_LEAVE_MSG,
     ANOMALY_STARRY_NIGHT_HORROR,
     ANOMALY_SILENT_BGM,
-    ANOMALY_SLOW_WALK
+    ANOMALY_SLOW_WALK,
+    ANOMALY_BREAK_SOUND
 ]
 
 # 페이드 변수
@@ -124,6 +126,8 @@ door_se = load_wav('door sound.wav')
 door_se.set_volume(50)
 switch_se = load_wav('switch.wav')
 switch_se.set_volume(60)
+break_se = load_wav('break.mp3')
+break_se.set_volume(70)
 
 running = True
 setup_new_room()
