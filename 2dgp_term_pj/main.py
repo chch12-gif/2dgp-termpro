@@ -335,6 +335,8 @@ while running:
         fade_alpha -= 0.05
         if fade_alpha <= 0.0:
             fade_alpha = 0.0
+            player.dir_x = 0
+            player.dir_y = 0
             current_state = STATE_POST_FADE_DELAY
             post_fade_delay_timer = get_time()
 
