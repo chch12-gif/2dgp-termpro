@@ -209,7 +209,7 @@ while running:
                 transition_target_room = 0
                 success_count = 0
                 seen_anomalies_this_run.clear()
-                transition_player_pos_x = player.boundary_right
+                transition_player_pos_x = CANVAS_WIDTH - TRANSITION_PADDING
                 fade_alpha = 0.0
 
 
@@ -277,7 +277,7 @@ while running:
                     transition_target_room = 0
                     success_count = 0
                     seen_anomalies_this_run.clear()
-                    transition_player_pos_x = player.boundary_left
+                    transition_player_pos_x = player.boundary_right - TRANSITION_PADDING
                     fade_alpha = 0.0
 
 
@@ -306,9 +306,9 @@ while running:
                 current_state = STATE_FADING_OUT
                 fade_alpha = 0.0
                 if room_change_status == 'NEXT':
-                    transition_player_pos_x = player.boundary_left
-                else:  # 'PREV'
-                    transition_player_pos_x = player.boundary_right
+                    transition_player_pos_x = 0 + TRANSITION_PADDING
+                else:
+                    transition_player_pos_x = CANVAS_WIDTH - TRANSITION_PADDING
 
     elif current_state == STATE_FADING_OUT:
         fade_alpha += 0.05
@@ -327,11 +327,13 @@ while running:
                         is_game_bgm_playing = True
                         print("DEBUG: BGM Resumed")
 
+                player.x = transition_player_pos_x
+
             else:
                 is_anomaly_present = False
                 anomaly_type = 0
 
-            player.x = transition_player_pos_x
+
 
             if anomaly_type == ANOMALY_PLAYER_GIANT:
                 player.y = 350
@@ -346,8 +348,7 @@ while running:
         fade_alpha -= 0.05
         if fade_alpha <= 0.0:
             fade_alpha = 0.0
-            player.dir_x = 0
-            player.dir_y = 0
+
             current_state = STATE_POST_FADE_DELAY
             post_fade_delay_timer = get_time()
 

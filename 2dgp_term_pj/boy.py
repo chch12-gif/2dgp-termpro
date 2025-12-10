@@ -77,6 +77,9 @@ class Boy:
         frame_time = get_time() - self.current_time
         self.current_time = get_time()
 
+        if frame_time > 0.05:
+            frame_time = 0.05
+
         move_speed = self.speed
         if self.running_state:
             move_speed = self.speed * 2
