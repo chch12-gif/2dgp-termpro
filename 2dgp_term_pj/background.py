@@ -16,6 +16,7 @@ class Background:
         self.venus = load_image('venus.png')
         self.msg_font = load_font('ariblk.ttf', 40)
         self.starry_night_horror = load_image('pic_5.png')
+        self.man_bust = load_image('man_1.png')
 
     def draw(self, room_index, anomaly_type, player_x, shadow_x=0, shadow_y=300 ,shadow_dir=0, msg_count=0):
         self.image.draw(400, 300)
@@ -87,6 +88,7 @@ class Background:
                 dy = VENUS_Y
 
             self.venus.composite_draw(0, '', dx, dy, VENUS_W, VENUS_H)
+            self.man_bust.composite_draw(0, '', MAN_BUST_X, MAN_BUST_Y, MAN_BUST_W, MAN_BUST_H)
 
 
     def draw_zoomed(self, viewing_art_id, anomaly_type):
@@ -111,6 +113,9 @@ class Background:
 
         elif viewing_art_id == ART_VENUS:
             self.venus.composite_draw(0, '', 400, 300, MONA_LARGE_W, MONA_LARGE_H)
+
+        elif viewing_art_id == ART_MAN_BUST:
+            self.man_bust.composite_draw(0, '', 400, 300, 400, 500)
 
         elif viewing_art_id == ART_STARRY_NIGHT:
             if anomaly_type == ANOMALY_STARRY_NIGHT_HORROR:
