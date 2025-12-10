@@ -162,6 +162,9 @@ while running:
                           if check_collision(player.x, player.y, target_venus_x, target_venus_y, 200):
                               current_state = STATE_VIEWING_ART
                               currently_viewing_art = ART_VENUS
+                          elif check_collision(player.x, player.y, MAN_BUST_X, MAN_BUST_Y, 150):
+                              current_state = STATE_VIEWING_ART
+                              currently_viewing_art = ART_MAN_BUST
 
             elif current_state == STATE_VIEWING_ART:
                 current_state = STATE_GAMEPLAY
@@ -200,7 +203,8 @@ while running:
                     obs_x, obs_y = VENUS_X, VENUS_Y
 
                 current_obstacles.append((obs_x, obs_y, VENUS_W * 0.6, VENUS_H * 0.3))
-
+                current_obstacles.append((MAN_BUST_X, MAN_BUST_Y, MAN_BUST_W * 0.5, MAN_BUST_H * 0.3))
+                e
             room_change_status = player.update(current_obstacles)
 
             if anomaly_type == ANOMALY_LEAVE_MSG:
