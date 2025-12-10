@@ -111,6 +111,9 @@ game_bgm = load_music('bgm_2.mp3')
 title_bgm.set_volume(32)
 game_bgm.set_volume(32)
 title_bgm.repeat_play()
+door_se = load_wav('door sound.wav')
+door_se.set_volume(50)
+
 running = True
 setup_new_room()
 
@@ -185,6 +188,7 @@ while running:
 
             room_change_status = player.update(current_obstacles)
             if room_change_status == 'PREV':
+                door_se.play()
                 current_state = STATE_FADING_OUT
                 transition_target_room = 0
                 success_count = 0
@@ -204,7 +208,7 @@ while running:
 
                 current_obstacles.append((obs_x, obs_y, VENUS_W * 0.6, VENUS_H * 0.3))
                 current_obstacles.append((MAN_BUST_X, MAN_BUST_Y, MAN_BUST_W * 0.5, MAN_BUST_H * 0.3))
-                e
+
             room_change_status = player.update(current_obstacles)
 
             if anomaly_type == ANOMALY_LEAVE_MSG:
@@ -244,6 +248,7 @@ while running:
 
 
             if room_change_status == 'NEXT' or room_change_status == 'PREV':
+                door_se.play()
                 is_correct_choice = False
                 # 정답 판별 로직
                 if room_change_status == 'NEXT' and not is_anomaly_present:
