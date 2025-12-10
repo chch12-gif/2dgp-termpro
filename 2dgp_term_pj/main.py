@@ -385,6 +385,10 @@ while running:
 
         # 2. UI 그리기
         draw_ui_text()
+        if anomaly_type == ANOMALY_SLOW_WALK:
+            player.speed = 50
+        else:
+            player.speed = 200
 
         # 3. 캐릭터 거대화 이상현상 처리
         if anomaly_type == ANOMALY_PLAYER_GIANT:

@@ -34,9 +34,8 @@ class Boy:
         # 위치 및 속도 설정
         self.x = 400
         self.y = 300  # 바닥 타일 중앙(y=300)으로 설정
-        self.walk_speed = 5
-        self.run_speed = 10
-        self.current_speed = self.walk_speed
+        self.speed = 200
+        self.current_time = get_time()
 
         # 상태 변수
         self.dir_x = 0
@@ -57,7 +56,6 @@ class Boy:
                 self.dir_y = -1
             elif event.key == SDLK_LSHIFT or event.key == SDLK_RSHIFT:
                 self.running_state = True
-                self.current_speed = self.run_speed
         elif event.type == SDL_KEYUP:
             if event.key == SDLK_RIGHT:
                 self.dir_x = 0
@@ -73,13 +71,18 @@ class Boy:
 
             elif event.key == SDLK_LSHIFT or event.key == SDLK_RSHIFT:
                 self.running_state = False
-                self.current_speed = self.walk_speed
 
 
     def update(self, obstacles=[]):
+        frame_time = get_time() - self.current_time
+        self.current_time = get_time()
 
-        potential_x = self.x + self.dir_x * self.current_speed
-        potential_y = self.y + self.dir_y * self.current_speed
+        move_speed = self.speed
+        if self.running_state:
+            move_speed = self.speed * 2
+        distance = move_speed * frame_time
+        potential_x = self.x + self.dir_x * distance
+        potential_y = self.y + self.dir_y * distance
 
         collided_x = False
         for obs in obstacles:
