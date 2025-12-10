@@ -60,9 +60,9 @@ class ExitDoor:
     def __init__(self):
         self.image = load_image('black_pixel.png')
         self.x = 720
-        self.y = 450
+        self.y = 480
         self.width = 100
-        self.height = 200
+        self.height = 150
 
     def draw(self):
         self.image.draw(self.x, self.y, self.width, self.height)
