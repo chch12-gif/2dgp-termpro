@@ -177,3 +177,6 @@ class Boy:
             0, flip_option,
             self.x, self.y, self.current_w, self.current_h
         )
+
+    def get_bb(self):
+        return self.x - 30, self.y - 50, self.x + 30, self.y + 50

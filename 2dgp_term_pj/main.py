@@ -55,10 +55,37 @@ transition_player_pos_x = 0
 post_fade_delay_timer = 0.0
 
 
+# ---  ExitDoor 클래스 (검은 문) ---
+class ExitDoor:
+    def __init__(self):
+        self.image = load_image('black_pixel.png')
+        self.x = 720
+        self.y = 450
+        self.width = 100
+        self.height = 200
+
+    def draw(self):
+        self.image.draw(self.x, self.y, self.width, self.height)
+        draw_rectangle(*self.get_bb())
+
+    def get_bb(self):
+        return self.x - self.width // 2, self.y - self.height // 2, self.x + self.width // 2, self.y + self.height // 2
+
 # --- 헬퍼 함수 ---
 def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
     distance_sq = (a_x - b_x) ** 2 + (a_y - b_y) ** 2
     return distance_sq < distance_threshold ** 2
+
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
 
 
 def setup_new_room():
@@ -111,12 +138,14 @@ open_canvas(CANVAS_WIDTH, CANVAS_HEIGHT)
 # 객체 생성
 player = Boy()
 background_manager = Background()
+exit_door = ExitDoor()
 
 black_pixel = load_image('black_pixel.png')
 title_screen_image = load_image('title.png')
 title_font = load_font('ariblk.ttf', 30)
 ui_font = load_font('ariblk.ttf', 24)
 inst_font = load_font('ariblk.ttf',20)
+ending_font = load_font('ariblk.ttf', 50)
 title_bgm = load_music('bgm_1.mp3')
 game_bgm = load_music('bgm_2.mp3')
 title_bgm.set_volume(32)
@@ -201,6 +230,9 @@ while running:
 
         # [1번 방: 탈출/성공 방]
         if current_room_index == 1:
+            if collide(player, exit_door):
+                print("GAME CLEAR! Moving to Ending.")
+                current_state = STATE_ENDING
 
             room_change_status = player.update(current_obstacles)
             if room_change_status == 'PREV':
@@ -399,6 +431,9 @@ while running:
 
         # 2. UI 그리기
         draw_ui_text()
+        if current_room_index == 1:
+            exit_door.draw()
+
         if anomaly_type == ANOMALY_SLOW_WALK:
             player.speed = 50
         else:
@@ -419,8 +454,12 @@ while running:
 
     # [그림 확대 보기]
     elif current_state == STATE_VIEWING_ART:
-
         background_manager.draw_zoomed(currently_viewing_art, anomaly_type)
+    elif current_state == STATE_ENDING:
+        black_pixel.opacify(1.0)
+        black_pixel.draw(400, 300, 800, 600)
+        ending_font.draw(280, 300, "THE END", (255, 255, 255))
+        ui_font.draw(250, 200, "Press any key to exit", (150, 150, 150))
 
     # [페이드 효과]
     if current_state == STATE_FADING_OUT or current_state == STATE_FADING_IN:
