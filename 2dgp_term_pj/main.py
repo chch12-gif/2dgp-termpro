@@ -27,6 +27,9 @@ msg_timer = 0.0
 msg_count = 0
 msg_triggered = False
 
+is_lights_off = False
+is_game_bgm_playing = False
+
 #이상현상 리스트
 ALL_ANOMALIES = [
     ANOMALY_MONALISA_SMILE,
@@ -38,7 +41,8 @@ ALL_ANOMALIES = [
     ANOMALY_ALL_SAME,
     ANOMALY_ALL_GONE,
     ANOMALY_LEAVE_MSG,
-    ANOMALY_STARRY_NIGHT_HORROR
+    ANOMALY_STARRY_NIGHT_HORROR,
+    ANOMALY_SILENT_BGM
 ]
 
 # 페이드 변수
@@ -56,6 +60,7 @@ def check_collision(a_x, a_y, b_x, b_y, distance_threshold):
 
 def setup_new_room():
     global is_anomaly_present, anomaly_type, seen_anomalies_this_run, is_first_game_run, shadow_x, shadow_y
+    global is_lights_off
 
     if is_first_game_run:
         is_anomaly_present = False
@@ -87,6 +92,9 @@ def setup_new_room():
                 msg_timer = 0.0
                 msg_triggered = False
 
+            if anomaly_type == ANOMALY_DARK_ZONE:
+                is_lights_off = False
+
             print(f"DEBUG: ANOMALY PRESENT (Type: {anomaly_type})")
         else:
             is_anomaly_present = False
@@ -113,6 +121,8 @@ game_bgm.set_volume(32)
 title_bgm.repeat_play()
 door_se = load_wav('door sound.wav')
 door_se.set_volume(50)
+switch_se = load_wav('switch.wav')
+switch_se.set_volume(60)
 
 running = True
 setup_new_room()
@@ -221,6 +231,17 @@ while running:
                         msg_count += 1
                         msg_timer = 0
                         if msg_count > 15: msg_count = 20
+
+            if anomaly_type == ANOMALY_DARK_ZONE:
+                if 200 < player.x < 600:
+                    if not is_lights_off:
+                        switch_se.play()
+                        is_lights_off = True
+                else:
+                    if is_lights_off:
+                        switch_se.play()
+                        is_lights_off = False
+
 
 
             if anomaly_type == ANOMALY_SHADOW_MAN:
