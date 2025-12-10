@@ -146,6 +146,7 @@ while running:
                 current_state = STATE_GAMEPLAY
                 title_bgm.stop()
                 game_bgm.repeat_play()
+                is_game_bgm_playing = True
 
 
         # [상호작용 E키]
@@ -304,6 +305,16 @@ while running:
             current_room_index = transition_target_room
             if current_room_index == 0:
                 setup_new_room()
+                if anomaly_type == ANOMALY_SILENT_BGM:
+                    game_bgm.stop()
+                    is_game_bgm_playing = False
+                    print("DEBUG: BGM Stopped (Silent Anomaly)")
+                else:
+                    if not is_game_bgm_playing:
+                        game_bgm.repeat_play()
+                        is_game_bgm_playing = True
+                        print("DEBUG: BGM Resumed")
+
             else:
                 is_anomaly_present = False
                 anomaly_type = 0
