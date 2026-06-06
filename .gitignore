@@ -179,3 +179,29 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Unreal Engine 필수 제외 폴더
+Binaries/
+DerivedDataCache/
+Intermediate/
+Saved/
+Build/
+
+# 프로젝트 파일 및 로그 (필요시)
+*.log
+*.kcrash
+
+# Visual Studio / IDE 관련 임시 파일
+.vs/
+.vscode/
+*.sln
+*.suo
+*.opensdf
+*.sdf
+*.db
+*.opendb
+*.pyc
+
+# OS 시스템 파일
+.DS_Store
+Thumbs.db
